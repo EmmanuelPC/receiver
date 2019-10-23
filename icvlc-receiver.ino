@@ -1,22 +1,19 @@
 #include <TimerOne.h>
 
-const int ledPin = 2;
+#define SAMPLE_PERIOD 10000
 
-int state = 0;
+const int sensorPin = A0;
 
 void timerInterrupt() {
-  if (state == 0) {
-    digitalWrite(ledPin, HIGH);
-  } else {
-    digitalWrite(ledPin, LOW);
-  }
-  state = !state;
+  int sensorValue = analogRead(sensorPin);
+
+  Serial.println(sensorValue);
 }
 
 void setup() {
-  pinMode(ledPin, OUTPUT);
+  Serial.begin(9600);
   
-  Timer1.initialize(500000);
+  Timer1.initialize(SAMPLE_PERIOD);
   Timer1.attachInterrupt(timerInterrupt);
 }
 
