@@ -1,20 +1,24 @@
-#include <SoftwareSerial.h>
+#include <TimerOne.h>
 
-SoftwareSerial GSerial(3,2,false);
-char rec=0;
+const int ledPin = 2;
+
+int state = 0;
+
+void timerInterrupt() {
+  if (state == 0) {
+    digitalWrite(ledPin, HIGH);
+  } else {
+    digitalWrite(ledPin, LOW);
+  }
+  state = !state;
+}
 
 void setup() {
-  pinMode(3, INPUT);
-  Serial.begin(9600);
-  GSerial.begin(400);
+  pinMode(ledPin, OUTPUT);
+  
+  Timer1.initialize(500000);
+  Timer1.attachInterrupt(timerInterrupt);
 }
 
 void loop() {
-  int val = analogRead(3);
-  Serial.println(val);
-  delay(100);
-  if(GSerial.available() != 0) {    
-    rec = GSerial.read();
-    Serial.print(rec);
-  }
 }
