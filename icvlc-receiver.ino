@@ -6,6 +6,7 @@
 
 const int sensorPin = A0;
 
+unsigned long symbols = 0;
 int state = 0;
 int vertexValue = 0;
 
@@ -14,13 +15,12 @@ void timerInterrupt() {
 
   if (abs(sensorValue - vertexValue) >= LEVEL_THRESHOLD) {
     state = sensorValue < vertexValue;
+
+    symbols = (symbols << 1) | state;
+    Serial.println(symbols, BIN);
     
     vertexValue = sensorValue;
   }
-
-  Serial.print(sensorValue);
-  Serial.print(" ");
-  Serial.println(vertexValue);
 }
 
 void setup() {
