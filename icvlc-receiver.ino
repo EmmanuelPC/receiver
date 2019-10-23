@@ -8,7 +8,7 @@
 #define NUM_SYMBOLS 20
 #define LEVEL_THRESHOLD 4
 
-const int sensorPin = A0;
+#define SENSOR_PIN A0
 
 int state = 0, steadyCounter = 0;
 int vertexValue = 0;
@@ -34,7 +34,7 @@ inline void pushSymbol(int symbol) {
 }
 
 void timerInterrupt() {
-  int sensorValue = analogRead(sensorPin);
+  int sensorValue = analogRead(SENSOR_PIN);
 
   if (abs(sensorValue - vertexValue) >= LEVEL_THRESHOLD) {
     state = sensorValue < vertexValue;
