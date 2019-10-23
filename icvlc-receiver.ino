@@ -20,6 +20,10 @@ void timerInterrupt() {
     Serial.println(symbols, BIN);
     
     vertexValue = sensorValue;
+  } else {
+    if ((!state && sensorValue > vertexValue) || (state && sensorValue < vertexValue)) {
+      vertexValue = sensorValue;
+    }
   }
 }
 
