@@ -1,7 +1,7 @@
 #include <TimerOne.h>
 #include "Manchester.h"
 
-#define SYMBOL_PERIOD 3000
+#define SYMBOL_PERIOD 2000
 #define SAMPLE_PERIOD 100
 #define SAMPLE_PER_SYMBOL (SYMBOL_PERIOD / SAMPLE_PERIOD)
 #define DOUBLE_SYMBOL_THRESHOLD 1.2
