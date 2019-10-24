@@ -1,7 +1,7 @@
 #include <TimerOne.h>
 #include "Manchester.h"
 
-#define SYMBOL_PERIOD 5000
+#define SYMBOL_PERIOD 3000
 #define SAMPLE_PERIOD 100
 #define SAMPLE_PER_SYMBOL (SYMBOL_PERIOD / SAMPLE_PERIOD)
 #define DOUBLE_SYMBOL_THRESHOLD 1.2
@@ -37,7 +37,6 @@ void pushSymbol(int symbol) {
         if (ch == STX) {
           ps = Started;
           symbolCounter = 0;
-          Serial.print("^");
         }
       }
     } else if (ps == Started) {
@@ -45,14 +44,13 @@ void pushSymbol(int symbol) {
         if (ch == ETX) {
           ps = Idle;
           symbolCounter = 0;
-          Serial.print("$");
+          Serial.println();
         } else {
           Serial.print(ch);
           symbolCounter = 0;
         }
       } else {
         ps = Idle;
-        Serial.print("#");
       }
     }
   }
