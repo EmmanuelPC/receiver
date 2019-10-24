@@ -6,12 +6,14 @@
 #define SAMPLE_PER_SYMBOL (SYMBOL_PERIOD / SAMPLE_PERIOD)
 #define DOUBLE_SYMBOL_THRESHOLD 1.2
 #define NUM_SYMBOLS 20
-#define LEVEL_THRESHOLD 4
+#define LEVEL_THRESHOLD 5
 
+#define SYN 0x04
 #define STX 0x02
 #define ETX 0x03
 
 #define SENSOR_PIN A0
+#define LED_PIN 2
 
 int state = 0, steadyCounter = 0;
 int vertexValue = 0;
@@ -34,23 +36,31 @@ void pushSymbol(int symbol) {
   if (symbolCounter >= NUM_SYMBOLS) {
     if (ps == Idle) {
       if (checkWord(symbols) && decodeWord(symbols, &ch)) {
-        if (ch == STX) {
+        if (ch == SYN) {
+          digitalWrite(LED_PIN, HIGH);
+          symbolCounter = 0;
+        } else if (ch == STX) {
           ps = Started;
           symbolCounter = 0;
+        } else {
+          digitalWrite(LED_PIN, LOW);
         }
+      } else {
+        digitalWrite(LED_PIN, LOW);
       }
-    } else if (ps == Started) {
+    } else {
       if (checkWord(symbols) && decodeWord(symbols, &ch)) {
         if (ch == ETX) {
           ps = Idle;
           symbolCounter = 0;
           Serial.println();
         } else {
-          Serial.print(ch);
           symbolCounter = 0;
+          Serial.print(ch);
         }
       } else {
         ps = Idle;
+        Serial.println();
       }
     }
   }
@@ -81,6 +91,8 @@ void timerInterrupt() {
 }
 
 void setup() {
+  pinMode(LED_PIN, OUTPUT);
+  
   Serial.begin(9600);
 
   Timer1.initialize(SAMPLE_PERIOD);
